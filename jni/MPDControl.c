@@ -1,11 +1,13 @@
 #include "MPDControl.h"
+#include "debug.h"
 
 #include <stdlib.h>
 
 #include <mpd/player.h>
+#include <mpd/status.h>
 #include <mpd/connection.h>
 
-#define LOG_TAG "MPDControl"
+#define LOG_TAG "MPDControl-native"
 
 static jfieldID field_nativeData;
 
@@ -14,7 +16,7 @@ static inline struct native_data_t *get_native_data (JNIEnv *env, jobject object
 
 	struct native_data_t *nat =	(struct native_data_t *)((*env)->GetIntField (env, object, field_nativeData));
 	if (!nat) {
-		LOGE ("Uninitialized native data\n");
+		LOGW ("Uninitialized native data\n");
 	}
 
 	LOGD ("<<<");
@@ -130,18 +132,18 @@ jstring Java_ru_byss_ampc_MPDControl_getErrorMessageNative (JNIEnv* env, jobject
 	return ret;
 }
 
-#define check_conn \
+#define check_conn(ret) \
 	if (!nat->conn) { \
 		LOGW ("Not connected!"); \
 		LOGD ("<<<"); \
-		return JNI_FALSE; \
+		return (ret); \
 	}
 
 jboolean Java_ru_byss_ampc_MPDControl_sendPlayNative (JNIEnv* env, jobject thiz) {
 	LOGD (">>>");
 	struct native_data_t *nat = get_native_data (env, thiz);
 	
-	check_conn;
+	check_conn (JNI_FALSE);
 	
 	if (mpd_run_play (nat->conn)) {
 		LOGD ("<<<");
@@ -156,7 +158,7 @@ jboolean Java_ru_byss_ampc_MPDControl_sendPauseNative (JNIEnv* env, jobject thiz
 	LOGD (">>>");
 	struct native_data_t *nat = get_native_data (env, thiz);
 	
-	check_conn;
+	check_conn (JNI_FALSE);
 	
 	if (mpd_send_pause (nat->conn, 1)) {
 		LOGD ("<<<");
@@ -171,7 +173,7 @@ jboolean Java_ru_byss_ampc_MPDControl_sendStopNative (JNIEnv* env, jobject thiz)
 	LOGD (">>>");
 	struct native_data_t *nat = get_native_data (env, thiz);
 	
-	check_conn;
+	check_conn (JNI_FALSE);
 	
 	if (mpd_send_stop (nat->conn)) {
 		LOGD ("<<<");
@@ -182,3 +184,13 @@ jboolean Java_ru_byss_ampc_MPDControl_sendStopNative (JNIEnv* env, jobject thiz)
 	}
 }
 
+jint Java_ru_byss_ampc_MPDControl_getStatusNative (JNIEnv* env, jobject thiz) {
+	LOGD (">>>");
+	struct native_data_t *nat = get_native_data (env, thiz);
+	
+	check_conn (0);
+	
+	LOGD ("<<<");
+
+	return (jint) mpd_run_status (nat->conn);	
+}
