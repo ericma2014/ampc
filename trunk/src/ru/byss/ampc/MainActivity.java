@@ -126,7 +126,53 @@ public class MainActivity extends Activity {
 		}
 	};
 	
-	private KeyListener onPortChange = new NumericRangeKeyListener (65535);
+	private OnClickListener onStatusClickListener = new OnClickListener () {
+		public void onClick (View v) {
+			String messageText = "OK";
+			MPDStatus status = control.getStatus ();
+			if (status == null) {
+				messageText = "Failed"; // TBD
+			} else {
+				String toastText = "";
+				toastText += "Volume:        " + Integer.toString (status.volume ())       + "\n";
+				toastText += "Repeat:        " + Boolean.toString (status.repeat ())       + "\n";
+				toastText += "Random:        " + Boolean.toString (status.random ())       + "\n";
+				toastText += "Single:        " + Boolean.toString (status.single ())       + "\n";
+				toastText += "Consume:       " + Boolean.toString (status.consume ())      + "\n";
+				toastText += "Queue length:  " + Integer.toString (status.queueLength ())  + "\n";
+				toastText += "Queue version: " + Integer.toString (status.queueVersion ()) + "\n";
+				String stateString = "(null)";
+				switch (status.state ()) {
+					case MPDStatus.MPD_STATE_UNKNOWN:
+						stateString = "Unknown";
+						break;
+
+					case MPDStatus.MPD_STATE_PLAY:
+						stateString = "Play";
+						break;
+
+					case MPDStatus.MPD_STATE_PAUSE:
+						stateString = "Pause";
+						break;
+
+					case MPDStatus.MPD_STATE_STOP:
+						stateString = "Stop";
+						break;
+				}
+				toastText += "MPD state:     " + stateString                               + "\n";
+				toastText += "Crossfade:     " + Integer.toString (status.crossfade ())    + "\n";
+				toastText += "Song position: " + Integer.toString (status.songPos ())      + "\n";
+				toastText += "Song ID:       " + Integer.toString (status.songId ())       + "\n";
+				toastText += "Elapsed time:  " + Integer.toString (status.elapsedTime ())  + "\n";
+				toastText += "Elapsed ms:    " + Integer.toString (status.elapsedMs ())    + "\n";
+				toastText += "Total time:    " + Integer.toString (status.totalTime ())    + "\n";
+				
+				Log.d (TAG, "\n\n\n" + toastText + "\n\n\n");
+			}
+		}
+	};
+	
+	private KeyListener onPortChangeListener = new NumericRangeKeyListener (65535);
 	
 	@Override
 	public void onCreate (Bundle savedInstanceState) {
@@ -151,7 +197,10 @@ public class MainActivity extends Activity {
 		stopButton.setOnClickListener (onStopClickListener);
 
 		EditText portEditText = (EditText) findViewById (R.id.port);
-		portEditText.setKeyListener (onPortChange);
+		portEditText.setKeyListener (onPortChangeListener);
+		
+		Button statusButton = (Button) findViewById (R.id.status);
+		statusButton.setOnClickListener (onStatusClickListener);
 		
 		loadSettings ();
 	}

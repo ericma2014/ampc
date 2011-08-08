@@ -12,5 +12,6 @@
 		<Button android:layout_width="0px" android:layout_height="wrap_content" android:layout_weight="1" android:text="Pause" android:id="@+id/pause"/>
 		<Button android:layout_width="0px" android:layout_height="wrap_content" android:layout_weight="1" android:text="Stop" android:id="@+id/stop"/>
 	</LinearLayout>
+	<Button android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Status" android:id="@+id/status" />
 </LinearLayout>
 

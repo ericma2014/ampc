@@ -7,7 +7,9 @@ LOCAL_CFLAGS += -std=c99
 LOCAL_C_INCLUDES := jni/libmpdclient/include \
                     jni/libmpdclient/src
 LOCAL_LDLIBS := -llog
-LOCAL_SRC_FILES := MPDControl.c \
+LOCAL_SRC_FILES := \
+MPDControl.c \
+MPDStatus.c \
 libmpdclient/src/async.c \
 libmpdclient/src/capabilities.c \
 libmpdclient/src/cmessage.c \

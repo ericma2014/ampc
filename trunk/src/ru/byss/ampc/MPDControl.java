@@ -45,6 +45,15 @@ class MPDControl {
 		return sendStopNative ();
 	}
 	
+	public MPDStatus getStatus () {
+		MPDStatus ret = null;
+		int ptr = getStatusNative ();
+		if (ptr != 0) {
+			ret = new MPDStatus (ptr);
+		}
+		return ret;
+	}
+	
 	static {
 		System.loadLibrary ("ampc");
 		classInitNative ();
@@ -65,4 +74,7 @@ class MPDControl {
 	private native boolean sendPlayNative ();
 	private native boolean sendPauseNative ();
 	private native boolean sendStopNative ();
+
+	private native int getStatusNative ();
+
 };
