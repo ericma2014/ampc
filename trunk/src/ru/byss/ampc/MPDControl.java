@@ -22,7 +22,7 @@ class MPDControl {
 	}
 	
 	public boolean connect (String host) {
-		return connect (host, 6600, 0);
+		return connect (host, 0, 0);
 	}
 	
 	public boolean connected () {
