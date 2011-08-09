@@ -1,13 +1,19 @@
 package ru.byss.ampc;
 
 class MPDStatus {
-	public static final int MPD_STATE_UNKNOWN = 0;
+	public enum MpdState {
+		MPD_STATE_UNKNOWN,
+		MPD_STATE_STOP,
+		MPD_STATE_PLAY,
+		MPD_STATE_PAUSE
+	}
+	
+	/*public static final int MPD_STATE_UNKNOWN = 0;
 	public static final int MPD_STATE_STOP    = 1;
 	public static final int MPD_STATE_PLAY    = 2;
-	public static final int MPD_STATE_PAUSE   = 3;
+	public static final int MPD_STATE_PAUSE   = 3;*/
 
-	// TODO: hide constructor!
-	public MPDStatus (int ptr) {
+	protected MPDStatus (int ptr) {
 		nativeData = ptr;
 	}
 	
@@ -43,8 +49,18 @@ class MPDStatus {
 		return queueVersionNative ();
 	}
 	
-	public int state () {
-		return stateNative ();
+	public MpdState state () {
+		int state_int = stateNative ();
+		switch (state_int) {
+			case 1:
+				return MpdState.MPD_STATE_STOP;
+			case 2:
+				return MpdState.MPD_STATE_PLAY;
+			case 3:
+				return MpdState.MPD_STATE_PAUSE;
+			default:
+				return MpdState.MPD_STATE_UNKNOWN;
+		}
 	}
 	
 	public int crossfade () {
