@@ -143,19 +143,19 @@ public class MainActivity extends Activity {
 				toastText += "Queue version: " + Integer.toString (status.queueVersion ()) + "\n";
 				String stateString = "(null)";
 				switch (status.state ()) {
-					case MPDStatus.MPD_STATE_UNKNOWN:
+					case MPD_STATE_UNKNOWN:
 						stateString = "Unknown";
 						break;
 
-					case MPDStatus.MPD_STATE_PLAY:
+					case MPD_STATE_PLAY:
 						stateString = "Play";
 						break;
 
-					case MPDStatus.MPD_STATE_PAUSE:
+					case MPD_STATE_PAUSE:
 						stateString = "Pause";
 						break;
 
-					case MPDStatus.MPD_STATE_STOP:
+					case MPD_STATE_STOP:
 						stateString = "Stop";
 						break;
 				}
