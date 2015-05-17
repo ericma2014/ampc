@@ -1,0 +1,1 @@
+This is a simple client for MPD server which uses libmpdclient.
